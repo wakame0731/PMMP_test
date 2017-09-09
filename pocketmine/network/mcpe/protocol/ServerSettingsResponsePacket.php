@@ -21,21 +21,31 @@
 
 declare(strict_types=1);
 
-namespace pocketmine\inventory;
+namespace pocketmine\network\mcpe\protocol;
 
-/**
- * Saves all the information regarding default inventory sizes and types
- */
-interface SlotType{
-	const RESULT = 0;
+#include <rules/DataPacket.h>
 
-	const CRAFTING = 1; //Not used in Minecraft: PE yet
+use pocketmine\network\mcpe\NetworkSession;
 
-	const ARMOR = 2;
+class ServerSettingsResponsePacket extends DataPacket{
+	const NETWORK_ID = ProtocolInfo::SERVER_SETTINGS_RESPONSE_PACKET;
 
-	const CONTAINER = 3;
+	/** @var int */
+	public $formId;
+	/** @var string */
+	public $formData; //json
 
-	const HOTBAR = 4;
+	protected function decodePayload(){
+		$this->formId = $this->getUnsignedVarInt();
+		$this->formData = $this->getString();
+	}
 
-	const FUEL = 5;
+	protected function encodePayload(){
+		$this->putUnsignedVarInt($this->formId);
+		$this->putString($this->formData);
+	}
+
+	public function handle(NetworkSession $session) : bool{
+		return $session->handleServerSettingsResponse($this);
+	}
 }

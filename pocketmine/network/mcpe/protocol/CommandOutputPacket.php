@@ -21,34 +21,24 @@
 
 declare(strict_types=1);
 
-namespace pocketmine\inventory;
+namespace pocketmine\network\mcpe\protocol;
 
-use pocketmine\item\Item;
+#include <rules/DataPacket.h>
 
-interface Transaction{
+use pocketmine\network\mcpe\NetworkSession;
 
-	/**
-	 * @return Inventory
-	 */
-	public function getInventory() : Inventory;
+class CommandOutputPacket extends DataPacket{
+	const NETWORK_ID = ProtocolInfo::COMMAND_OUTPUT_PACKET;
 
-	/**
-	 * @return int
-	 */
-	public function getSlot() : int;
+	protected function decodePayload(){
+		//TODO
+	}
 
-	/**
-	 * @return Item
-	 */
-	public function getSourceItem() : Item;
+	protected function encodePayload(){
+		//TODO
+	}
 
-	/**
-	 * @return Item
-	 */
-	public function getTargetItem() : Item;
-
-	/**
-	 * @return float
-	 */
-	public function getCreationTime() : float;
+	public function handle(NetworkSession $session) : bool{
+		return $session->handleCommandOutput($this);
+	}
 }

@@ -284,7 +284,7 @@ class ItemFactory{
 			if($id < 256){
 				/* Blocks must have a damage value 0-15, but items can have damage value -1 to indicate that they are
 				 * crafting ingredients with any-damage. */
-				$item = new ItemBlock(BlockFactory::get($id, $meta !== -1 ? $meta : 0), $meta);
+				$item = new ItemBlock(BlockFactory::get($id, $meta !== -1 ? $meta & 0xf : 0), $meta);
 			}else{
 				/** @var Item|null $listed */
 				$listed = self::$list[$id];
@@ -338,13 +338,11 @@ class ItemFactory{
 
 			if(defined(Item::class . "::" . strtoupper($b[0]))){
 				$item = self::get(constant(Item::class . "::" . strtoupper($b[0])), $meta);
-				if($item->getId() === Item::AIR and strtoupper($b[0]) !== "AIR" and is_numeric($b[0])){
-					$item = self::get(((int) $b[0]) & 0xFFFF, $meta);
+				if($item->getId() === Item::AIR and strtoupper($b[0]) !== "AIR"){
+					$item = self::get($b[0] & 0xFFFF, $meta);
 				}
-			}elseif(is_numeric($b[0])){
-				$item = self::get(((int) $b[0]) & 0xFFFF, $meta);
 			}else{
-				$item = self::get(Item::AIR, 0, 0);
+				$item = self::get($b[0] & 0xFFFF, $meta);
 			}
 
 			return $item;

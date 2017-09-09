@@ -21,12 +21,13 @@
 
 declare(strict_types=1);
 
-/**
- * All the different object classes used in populators
- */
-namespace pocketmine\level\generator\object;
+namespace pocketmine\network\mcpe\protocol\types;
 
+interface PlayerPermissions{
 
-abstract class PopulatorObject{
+	const CUSTOM = 3;
+	const OPERATOR = 2;
+	const MEMBER = 1;
+	const VISITOR = 0;
 
 }
